@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+
+    <script>
+        osql.requireLogin();
+
+        var me;
+        var room = A;
+
+        $(document).ready(async function () {
+            me = await osql.getMe();
+            document.getElementById('firstname').innerHTML = me.fname;
+            document.getElementById('lastname').innerHTML = me.lname;
+        });
+        
+        function buttonPressed(){
+            var sql = 'select '
+            var sentence = "monndaibun";
+            var anser = document.getElementById('tf1').value;
+            if(sentence == anser){
+                document.getElementById('result').innerHTML = 'OK'
+            }
+            else{
+                document.getElementById('result').innerHTML = 'もう一度入力してください'
+            }
+
+        }
+
+
+    </script>
+
+</head>
+
+<body>
+    <p id = "sentence">
+        monndaibun
+    </p>
+    回答: <input id="tf1" value="" type="textfield">
+    <button onclick = "buttonPressed()">判定</button>
+    <p id = "result">
+        判定結果
+    </p>
+
+
+
+</body>
+
+</html>
