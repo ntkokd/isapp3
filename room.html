@@ -62,18 +62,26 @@
 </head>
 
 <body>
-    <h1>talkroom <span id="roomname"></span></h1>
+    <h1>room</h1>
     <div style="text-align: right;">
         ようこそ<span id="lastname"></span> <span id="firstname"></span>さん
-        <a href="index.html">top</a>
+        <a href="usertop.html">top</a>
     </div>
     <hr>
-    <div>
-        <input id="comment" type="text">
-        <button onclick="newComment()">new comment</button>
-    </div>
-    <br>
-    <div id="comments"></div>
+
+    <h2>rooms</h2>
+    <div id="rooms"></div>
+    <table border="1">
+        <tr>
+            <td>roomA</td><td><a href="version-control-test.html">入る</a></td>
+        </tr>
+        <tr>
+            <td>roomB</td><td><a href="version-control-test.html">入る</a></td>
+        </tr>
+        <tr>
+            <td>roomC</td><td><a href="version-control-test.html">入る</a></td>
+        </tr>
+    </table>
 </body>
 
 </html>
