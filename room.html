@@ -18,17 +18,16 @@
             me = await osql.getMe();
             document.getElementById('firstname').innerHTML = me.fname;
             document.getElementById('lastname').innerHTML = me.lname;
-
+            
             var sql = `select * from Rooms where id = ${roomId};`;
             var objects = await osql.connect(sql);
 
             var room = objects[0];
             document.getElementById('roomname').innerHTML = room.name;
-
+            
             await refreshComments();
             setInterval(refreshComments, 2000);
         });
-
 
         async function newComment() {
             var name = document.getElementById('comment').value;
@@ -38,7 +37,6 @@
 
             await refreshComments();
         }
-
         async function refreshComments() {
             var sql = `select * from Comments where roomId = ${roomId} order by time desc limit 10;`;
             var objects = await osql.connect(sql);
@@ -57,10 +55,6 @@
             html = html + '</table>';
             document.getElementById('comments').innerHTML = html;
         }
-
-
-
-
         
     </script>
 
