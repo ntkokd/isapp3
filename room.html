@@ -24,9 +24,16 @@
             var objects = await osql.connect(sql);
 
             var room = objects[0];
-            document.getElementById('roomname').innerHTML = room.name;
+            document.getElementById('roomname').innerHTML = roomId;
 
-            
+            var sql2 = `select * from Participate where roomId=${roomId}`
+            var objects = await osql.connect(sql2);
+            var number = (objects.length) + 1;
+            console.log(number)
+
+            var sql2 = `insert into Participate (userId, roomId, sequence) values('${me.id}','${roomId}','${number}')`
+            var numberId = await osql.connectInsert(sql2);
+
             await refreshParticipants();
             setInterval(refreshParticipants, 2000);
             setInterval(movegame,2000);
@@ -35,7 +42,7 @@
 
 
         async function refreshParticipants() { //参加者を表示する関数
-            var sql = `select * from Rooms where id = ${roomId};`;
+            var sql = `select * from Users inner join Participate on Users.id = Participate.userId where Participate.roomId ='${roomId}'`;
             var objects = await osql.connect(sql);
             console.log(objects);
             var html = '';
@@ -43,10 +50,8 @@
             for (var i = 0; i < objects.length; i++) {
                 html = html + '<tr>';
                 var object = objects[i];
-                html = html + `<td>${object.id}</td>`;
-                html = html + `<td>${object.time}</td>`;
-                html = html + `<td>${object.userId}</td>`;
-                html = html + `<td>${object.comment}</td>`;
+                html = html + `<td>${object.sequence}</td>`;
+                html = html + `<td>${object.fname} ${object.lname}</td>`;
                 html = html + '</tr>';
             }
             html = html + '</table>';
@@ -85,7 +90,7 @@
     <hr>
 
     <h2>rooms</h2>
-    <h1>talkroom <span id="roomname"></span></h1>
+    <h1>Room<span id="roomname"></span></h1>
     <div id="rooms"></div>
     <br>
     <div id="comments"></div>
