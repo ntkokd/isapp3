@@ -13,6 +13,7 @@
 
         var me;
         var roomId = osql.getParam('roomId');
+        console.log(roomId)
 
         $(document).ready(async function () {
             me = await osql.getMe();
@@ -31,7 +32,7 @@
 
 
         async function refreshParticipants() { //参加者を表示する関数
-            var sql = `select * from Comments where roomId = ${roomId} order by time desc limit 10;`;
+            var sql = `select * from Rooms where roomid = ${roomId} order by time desc limit 10;`;
             var objects = await osql.connect(sql);
             console.log(objects);
             var html = '';
@@ -49,10 +50,9 @@
             document.getElementById('comments').innerHTML = html;
         }
 
-        function gamestart(){//ゲームを始める関数
-            var turn = 1;
-            var sql = 'update Rooms set turn = 1 where id = ' + roomID +';';
-            var startID = osql.connectInsert(sql);
+        async function gamestart(){//ゲームを始める関数
+            var sql =  `update Rooms set turn = 1 where id =${roomId}; `;
+            var startID = osql.connect(sql);
             console.log(startId);
             //ゲームのページに動くようにする
 
@@ -77,7 +77,7 @@
     <br>
     <div id="comments"></div>
 
-    <buton onclick = "gamestart()">start</buton>
+    <button onclick = "gamestart()">start</button>
 
 </body>
 
