@@ -25,9 +25,12 @@
 
             var room = objects[0];
             document.getElementById('roomname').innerHTML = room.name;
+
             
             await refreshParticipants();
             setInterval(refreshParticipants, 2000);
+            setInterval(movegame,2000);
+
         });
 
 
@@ -56,6 +59,16 @@
             console.log(startId);
             //ゲームのページに動くようにする
 
+        }
+
+        async function movegame(){
+            var sql = `select * from Rooms where id = ${roomId};`;
+            var object = await osql.connect(sql);
+            var cheak = object[0].turn;
+            console.log(cheak);
+            if (cheak == 1){
+                window.location = `game.html?roomId=${roomId}`
+            }
         }
 
     </script>
