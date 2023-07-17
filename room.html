@@ -32,7 +32,7 @@
 
 
         async function refreshParticipants() { //参加者を表示する関数
-            var sql = `select * from Rooms where roomid = ${roomId} order by time desc limit 10;`;
+            var sql = `select * from Rooms where id = ${roomId};`;
             var objects = await osql.connect(sql);
             console.log(objects);
             var html = '';
