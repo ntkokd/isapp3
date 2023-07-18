@@ -21,11 +21,31 @@
             var object = await osql.connect(sql);
             console.log(object);
             sequence = object[0].sequence //複数入ってる場合は、最初の行の番号
-            document.getElementById('test').innerHTML = html;//番号ちゃんと入ってるか確認用（後で消す）
-            var sql2 = `select max(sequence) from Participate where roomId = ${roomId};`; 
+            document.getElementById('test').innerHTML = sequence;//番号ちゃんと入ってるか確認用（後で消す）
+            var sql2 = `select * from Participate where roomId = ${roomId};`; 
             var pop = await osql.connect(sql2);
-            all = pop[0].max(sequence); //人数
+            console.log(pop);
+            var all = pop.length//人数
+            if(sequence == all){
+                sequence = 0;
+            }
+
+            await turnchecking(all, sequence);
+            setInterval(turnchecking, 2000);
         });
+
+        async function turnchecking(all, sequence){
+            var sql = `select * from Rooms where id = ${roomId};`;
+            var object = await osql.connect(sql);
+            console.log(object);
+            var turn = object[0].turn;
+            if (turn % all == sequence){ //自分の番の時
+                document.getElementById('turn').innerHTML = 'あなたの番です';
+            } 
+            else{
+                document.getElementById('turn').innerHTML = '相手の入力待ちです';
+            }
+        }
 
 
     </script>
@@ -35,6 +55,7 @@
 <body>
     game
     <div id="test">テスト欄（後で消す）</div>
+    <div id="turn">順番</div>
     <input id="tf1" value="" type="textfield">
     <button onclick = 'buttonclick()'>送信</button>
 
