@@ -30,8 +30,7 @@
                 sequence = 0;
             }
 
-            await turnchecking(all, sequence);
-            setInterval(turnchecking, 2000);
+            setInterval(turnchecking(all, sequence), 2000);
         });
 
         async function turnchecking(all, sequence){
@@ -40,12 +39,17 @@
             console.log(object);
             var turn = object[0].turn;
             if (turn % all == sequence){ //自分の番の時
+                var html =  `<input id="tf1" value="" type="textfield"> <button onclick = 'buttonclick()'>送信</button>`
                 document.getElementById('turn').innerHTML = 'あなたの番です';
+                document.getElementById('answer').innerHTML = html;
             } 
             else{
                 document.getElementById('turn').innerHTML = '相手の入力待ちです';
+                document.getElementById('answer').innerHTML = ``;
             }
         }
+
+
 
 
     </script>
@@ -56,7 +60,6 @@
     game
     <div id="test">テスト欄（後で消す）</div>
     <div id="turn">順番</div>
-    <input id="tf1" value="" type="textfield">
-    <button onclick = 'buttonclick()'>送信</button>
+    <div id="answer"></div>
 
 </body>
