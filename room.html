@@ -42,7 +42,7 @@
 
 
         async function refreshParticipants() { //参加者を表示する関数
-            var sql = `select * from Users inner join Participate on Users.id = Participate.userId where Participate.roomId ='${roomId}'`;
+            var sql = `select * from Users inner join Participate on Users.id = Participate.userId where Participate.roomId ='${roomId}' order by sequence asc;`;
             var objects = await osql.connect(sql);
             console.log(objects);
             var html = '';
