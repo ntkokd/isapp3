@@ -30,7 +30,8 @@
                 sequence = 0;
             }
 
-            setInterval(turnchecking(all, sequence), 2000);
+            await turnchecking(all, sequence);
+            setInterval(await turnchecking(all, sequence), 2000);
         });
 
         async function turnchecking(all, sequence){
