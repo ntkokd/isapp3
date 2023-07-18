@@ -59,7 +59,7 @@
             var sql2 = `insert into Answers(content, turn) values ('${word}',${turn})`;
             var contents = await osql.connect(sql2);
             console.log(contents); 
-            var newturn = Number(turn) + 1
+            var newturn = Number(turn) + 1;
             var sql3 = `update Rooms set turn = ${newturn} where id =${roomId};`;
             var turnchange = await osql.connect(sql3);
             console.log(turnchange);            
