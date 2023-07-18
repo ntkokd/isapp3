@@ -12,8 +12,20 @@
         osql.requireLogin();
 
         var me;
+        var html;
         var roomId = osql.getParam('roomId');
         console.log(roomId)
+        $(document).ready(async function () {
+            me = await osql.getMe();
+            var sql = `select sequence from Participate where roomId = ${roomId} and userId = '${me.id}' ;` ;
+            var object = await osql.connect(sql);
+            console.log(object);
+            sequence = object[0].sequence //複数入ってる場合は、最初の行の番号
+            document.getElementById('test').innerHTML = html;//番号ちゃんと入ってるか確認用（後で消す）
+            var sql2 = `select max(sequence) from Participate where roomId = ${roomId};`; 
+            var pop = await osql.connect(sql2);
+            all = pop[0].max(sequence); //人数
+        });
 
 
     </script>
@@ -22,5 +34,8 @@
 
 <body>
     game
+    <div id="test">テスト欄（後で消す）</div>
+    <input id="tf1" value="" type="textfield">
+    <button onclick = 'buttonclick()'>送信</button>
 
 </body>

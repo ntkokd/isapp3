@@ -23,7 +23,6 @@
             var sql = `select * from Rooms where id = ${roomId};`;
             var objects = await osql.connect(sql);
 
-            var room = objects[0];
             document.getElementById('roomname').innerHTML = roomId;
 
             var sql2 = `select * from Participate where roomId=${roomId}`
