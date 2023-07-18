@@ -56,9 +56,22 @@
             var object = await osql.connect(sql);
             console.log(object);
             var turn = object[0].turn;
-            var sql2 = `insert into Answers(content, turn) values ('${word}',${turn})`;
+            var sql2 = `insert into Answers(roomId,turn, content) values (${roomId},${turn},'${word}')`;
             var contents = await osql.connect(sql2);
-            console.log(contents); 
+            console.log(contents);
+            var sql4 = `select * from Answers where roomId=${roomId} order by turn asc;`;
+            var object4 = await osql.connect(sql4);
+            var html = '';
+            html = html + '<table border="1">';
+            for (var i = 0; i < object4.length; i++) {
+                html = html + '<tr>';
+                var object = object4[i];
+                html = html + `<td>${object.turn}</td>`;
+                html = html + `<td>${object.content}</td>`;
+                html = html + '</tr>';
+            }
+            html = html + '</table>';
+            document.getElementById('content').innerHTML = html;
             var newturn = Number(turn) + 1;
             var sql3 = `update Rooms set turn = ${newturn} where id =${roomId};`;
             var turnchange = await osql.connect(sql3);
@@ -75,5 +88,6 @@
     <div id="test">テスト欄（後で消す）</div>
     <div id="turn">順番</div>
     <div id="answer"></div>
+    <div id="content"></div>
 
 </body>
