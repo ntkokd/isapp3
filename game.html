@@ -39,7 +39,8 @@
             var sql3 = `update Rooms set turn = ${newturn} where id =${roomId};`;
             var turnchange = await osql.connect(sql3);
             console.log(turnchange);
-
+            var word = document.getElementById('tf1')
+            word.value = ' '
 
             refreshContents();
         }
