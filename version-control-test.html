@@ -4,24 +4,120 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script type="text/javascript" src="lib/jquery.min.js"></script>
+    <script type="text/javascript" src="lib/osql.js"></script>
+
+    <script>
+        osql.requireLogin();
+
+        var me;
+        var roomId = osql.getParam('roomId');
+        
+        $(document).ready(async function () {
+            me = await osql.getMe();
+            var sql0 = `select * from Rooms where id = ${roomId};`;
+            var object0 = await osql.connect(sql0);
+            console.log(object0);
+            var turn = object0[0].turn;
+            document.getElementById('firstname').innerHTML = me.fname;
+            document.getElementById('lastname').innerHTML = me.lname;
+
+            
+
+            await refreshContents();
+            setInterval(refreshContents, 2000);
+
+            await turnchecking()
+            setInterval(turnchecking, 2000)
+        });
+
+        async function sendAnswer() {
+            var word = document.getElementById('tf1').value;
+            var sql = `select * from Rooms where id = ${roomId};`;
+            var object = await osql.connect(sql);
+            console.log(object);
+            var Aturn = object[0].turn;
+            var sql2 = `insert into Answers(roomId,turn, content) values (${roomId},${Aturn},'${word}')`;
+            var contents = await osql.connect(sql2);
+            console.log(contents);           
+            var Anewturn = Number(Aturn) + 1;
+            var sql3 = `update Rooms set turn = ${Anewturn} where id =${roomId};`;
+            var turnchange = await osql.connect(sql3);
+            console.log(turnchange);
+            refreshContents();
+        }
+
+        async function refreshContents() {          
+            var sql4 = `select * from Answers where roomId=${roomId} order by turn asc;`;
+            var object4 = await osql.connect(sql4);
+            console.log(object4)
+            var html = '';
+            html = html + '<table border="1">';
+            for (var i = 0; i < object4.length; i++) {
+                html = html + '<tr>';
+                var object = object4[i];
+                html = html + `<td>${object.turn}</td>`;
+                html = html + `<td>${object.content}</td>`;
+                html = html + '</tr>';
+            }
+            html = html + '</table>';
+            document.getElementById('content').innerHTML = html;
+        }
+
+        async function turnchecking(){
+            var me = await osql.getMe();
+            var sql = `select sequence from Participate where roomId = ${roomId} and userId = '${me.id}' ;` ;
+            var object = await osql.connect(sql);
+            console.log(object);
+            sequence = object[0].sequence //複数入ってる場合は、最初の行の番号）
+            var sql2 = `select * from Participate where roomId = ${roomId};`; 
+            var pop = await osql.connect(sql2);
+            console.log(pop);
+            var all = pop.length//人数
+            if(sequence == all){
+                sequence = 0;
+            }
+            var sql = `select * from Rooms where id = ${roomId};`;
+            var object = await osql.connect(sql);
+            console.log(object);
+            var newturn = object[0].turn;
+            if (turn !== newturn){
+                if (turn % all == sequence){ //自分の番の時
+                turn = newturn;
+                var answerhtml =  `<input id="tf1" value="" type="textfield"> <button onclick = 'sendAnswer()'>送信</button>`
+                    document.getElementById('turn').innerHTML = 'あなたの番です';
+                    document.getElementById('answer').innerHTML = answerhtml;
+                } 
+                else{
+                    document.getElementById('turn').innerHTML = '相手の入力待ちです';
+                    document.getElementById('answer').innerHTML = ``;
+                }
+
+            }
+
+
+        }
+
+    </script>
+
 </head>
 
 <body>
-    <h1>複数でのgit操作　練習用ファイル</h1>
-    <h2>くだもの</h2>
-    <ul>
-        <li>りんご</li>
-        <li>いちご</li>
-    </ul>
-    <h2>のりもの</h2>
-    <ul>
-        <li>くるま</li>
-        <li>ショベルカー</li>
-    </ul>
-    <h2>かぐ</h2>
-    <ul>
-        <li>つくえ</li>
-    </ul>
+    <h1>robby</h1>
+    <div style="text-align: right;">
+        ようこそ<span id="lastname"></span> <span id="firstname"></span>さん
+        <a href="index.html">top</a>
+    </div>
+    <hr>
+    <div id="turn">順番</div>
+    <div id="answer"></div>
+    <div>
+        <h2>ルームを作る</h2>
+        <button onclick="sendAnswer()">回答</button>
+    </div>
+    <h2>ルーム一覧</h2>
+    <div id="content"></div>
 </body>
 
 </html>
