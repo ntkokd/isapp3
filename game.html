@@ -79,13 +79,11 @@
             console.log(object);
             var turn = object[0].turn;
             if (turn % all == sequence){ //自分の番の時
-                var answerhtml =  `<input id="tf1" value="" type="textfield"> <button onclick = 'sendAnswer()'>送信</button>`
                 document.getElementById('turn').innerHTML = 'あなたの番です';
-                document.getElementById('answer').innerHTML = answerhtml;
+
             } 
             else{
                 document.getElementById('turn').innerHTML = '相手の入力待ちです';
-                document.getElementById('answer').innerHTML = ``;
             }
 
         }
@@ -104,7 +102,7 @@
     <div id="turn">順番</div>
     <div id="answer"></div>
     <div>
-        <h2>ルームを作る</h2>
+        <input id="tf1" value="" type="textfield"> 
         <button onclick="sendAnswer()">回答</button>
     </div>
     <h2>ルーム一覧</h2>
